@@ -1,4 +1,4 @@
-from flask import Flask, send_file, jsonify
+from flask import Flask, send_file, jsonify, request
 from flask_cors import CORS
 from sudoku import Sudoku
 
@@ -37,6 +37,19 @@ def sudoku():
         # Convert the puzzle to a JSON-serializable format
         puzzle_data = [[puzzle.board[r][c] for c in range(9)] for r in range(9)]
         return jsonify(puzzle_data)
+    except Exception as e:
+        return str(e), 500
+    
+# solving a sudoku board
+@app.route('/solve-sudoku', methods=['POST'])
+def solvesudoku():
+    try:
+        data = request.get_json()
+        board = data.get('board')
+        puzzle = Sudoku(3, board=board)
+        solution = puzzle.solve()
+        solution_data = [[solution[r][c] for c in range(9)] for r in range(9)]
+        return jsonify(solvedBoard=solution_data)
     except Exception as e:
         return str(e), 500
 
