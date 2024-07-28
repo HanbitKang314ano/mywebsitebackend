@@ -45,11 +45,11 @@ def sudoku():
 def solvesudoku():
     try:
         data = request.get_json()
-        board = data.get('board')
-        print("Received board:", board)  # Add this line for logging
-        puzzle = Sudoku(3, board=board)
+        boardFromFrontend = data.get('board')
+        puzzle = Sudoku(3, board=boardFromFrontend)
         solution = puzzle.solve()
-        solution_data = [[solution[r][c] for c in range(9)] for r in range(9)]
+        solution_data = [[solution.board[r][c] for c in range(9)] for r in range(9)] # this is where the issue lies
+        print("check 4")
         return jsonify(solvedBoard=solution_data)
     except Exception as e:
         print("Error solving Sudoku:", e)  # Add this line for logging
